@@ -143,7 +143,7 @@ class PriceBar(
      * String representation of this price-bar
      */
     override fun toString(): String =
-        "symbol=${asset.symbol} ohlcv=${ohlcv.toList()} timeSpan=${timeSpan?.toString() ?: "unknown"}"
+        "symbol=${asset.symbol} ohlcv=${ohlcv.toList()} timeSpan=${timeSpan?.toString() ?: "unknown"} instant=$instant"
 
     /**
      * Adjust this PriceBar conform the provided adjusted close [price]
