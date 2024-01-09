@@ -20,6 +20,7 @@ import org.roboquant.common.Amount
 import org.roboquant.common.Asset
 import org.roboquant.common.TimeSpan
 import org.roboquant.feeds.OrderBook.OrderBookEntry
+import java.time.Instant
 import kotlin.math.absoluteValue
 
 /**
@@ -86,7 +87,8 @@ interface PriceAction : Action {
 class PriceBar(
     override val asset: Asset,
     val ohlcv: DoubleArray,
-    val timeSpan: TimeSpan? = null
+    val timeSpan: TimeSpan? = null,
+    val instant: Instant? = null
 ) : PriceAction {
 
     /**
@@ -99,11 +101,13 @@ class PriceBar(
         low: Number,
         close: Number,
         volume: Number = Double.NaN,
-        timeSpan: TimeSpan? = null
+        timeSpan: TimeSpan? = null,
+        instant: Instant? = null
     ) : this(
         asset,
         doubleArrayOf(open.toDouble(), high.toDouble(), low.toDouble(), close.toDouble(), volume.toDouble()),
-        timeSpan
+        timeSpan,
+        instant
     )
 
     /**
@@ -141,7 +145,7 @@ class PriceBar(
      * String representation of this price-bar
      */
     override fun toString(): String =
-        "symbol=${asset.symbol} ohlcv=${ohlcv.toList()} timeSpan=${timeSpan?.toString() ?: "unknown"}"
+        "symbol=${asset.symbol} ohlcv=${ohlcv.toList()} timeSpan=${timeSpan?.toString() ?: "unknown"} instant=$instant"
 
     /**
      * Adjust this PriceBar conform the provided adjusted close [price]

@@ -45,12 +45,14 @@ import kotlin.io.path.isRegularFile
  *
  * @constructor Create new Avro Feed
  */
-class AvroFeed(private val path: Path, useCache: Boolean = false) : AssetFeed {
+class AvroFeed(private val path: Path, useCache: Boolean = false, multiplier: Double = 1.0) : AssetFeed {
 
     /**
      * Instantiate an Avro Feed based on the Avro file at [path]
      */
     constructor(path: String) : this(Path.of(path))
+
+    constructor(path: String, multiplier: Double) : this(Path.of(path), multiplier = multiplier)
 
     /**
      * Contains mapping of a serialized Asset string to an Asset
@@ -82,7 +84,9 @@ class AvroFeed(private val path: Path, useCache: Boolean = false) : AssetFeed {
         val metadata = metadataProvider.build(useCache)
         this.index = metadata.index
         timeframe = metadata.timeframe
-        assetLookup = metadata.assets
+        assetLookup = metadata.assets.mapValues {
+            Asset(it.value.symbol, it.value.type, it.value.currency, it.value.exchange, multiplier, it.value.id)
+        }
 
         logger.info { "loaded feed with timeframe=$timeframe" }
     }
